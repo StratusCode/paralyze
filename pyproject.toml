@@ -1,0 +1,39 @@
+[tool.pdm]
+
+[project]
+name = "paralyze"
+version = "0.1.0"
+description = "Primitives and helpers for managing concurrent and parallel processes"
+authors = [
+    {name = "Nick Joyce", email = "nick@stratuscode.com"},
+]
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "MIT"}
+dependencies = [
+    "configur8>=2.0, <2.1",
+    "google-cloud-monitoring",
+    "structlog",
+]
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "autopep8",
+    "black",
+    "coverage",
+    "flake8",
+    "mypy",
+    "pytest-cov",
+    "pytest-mock",
+    "pytest-mypy-plugins",
+    "pytest-mypy",
+    "pytest-watch",
+    "pytest",
+    "python-dotenv[cli]",
+    "types-pyyaml>=6.0.12.8",
+    "vulture",
+]
+
+[build-system]
+requires = ["pdm-pep517>=1.0"]
+build-backend = "pdm.pep517.api"
