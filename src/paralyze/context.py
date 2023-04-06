@@ -8,7 +8,7 @@ from paralyze import logging, metrics, core
 Config = t.TypeVar("Config")
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, kw_only=True)
 class Context(t.Generic[Config]):
     stopping: threading.Event
     log: logging.Logger
@@ -17,8 +17,8 @@ class Context(t.Generic[Config]):
 
     metrics: metrics.Client
 
-    parent: "Context | None" = None
-    root: "Context | None" = None
+    parent: "Context[Config] | None" = None
+    root: "Context[Config] | None" = None
 
     def bind(
         self,
@@ -54,5 +54,11 @@ class Context(t.Generic[Config]):
     ) -> bool:
         try:
             return core.wait(self.stopping, event, timeout)
+        finally:
+            self.maybe_stop()
+
+    def sleep(self, timeout: float, step: float = 1.0) -> None:
+        try:
+            core.sleep(self.stopping, timeout, step)
         finally:
             self.maybe_stop()
