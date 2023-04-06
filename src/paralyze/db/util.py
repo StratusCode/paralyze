@@ -13,80 +13,90 @@ P = t.ParamSpec("P")
 R = t.TypeVar("R")
 
 
-def is_disconnect(err: Exception) -> bool:
-    try:
-        if is_turbodbc_disconnect(err):
-            return True
-    except ImportError:
-        pass
+def unwrap_sqlalchemy_error(err: BaseException) -> BaseException | None:
+    if isinstance(err, exc.DBAPIError):
+        return err.orig
 
-    try:
-        if is_pymssql_disconnect(err):
-            return True
-    except ImportError:
-        pass
+    return err
 
-    try:
-        if is_mysql_disconnect(err):
-            return True
-    except ImportError:
-        pass
+
+def is_disconnect(err: BaseException) -> bool:
+    err = unwrap_sqlalchemy_error(err)
+
+    if err is None:
+        return False
+
+    if is_turbodbc_disconnect(err):
+        return True
+
+    if is_pymssql_disconnect(err):
+        return True
+
+    if is_mysql_disconnect(err):
+        return True
+
+    if is_pymysql_disconnect(err):
+        return True
 
     return False
 
 
 def is_turbodbc_disconnect(err: Exception) -> bool:
-    import turbodbc  # type: ignore
+    import turbodbc  # noqa
 
-    if not isinstance(err, exc.DatabaseError):
-        return False
-
-    api_error = err.orig
-
-    if api_error is None:
-        return False
-
-    if not isinstance(api_error, turbodbc.DatabaseError):
+    if not isinstance(err, turbodbc.DatabaseError):
         return False
 
     try:
-        msg = str(api_error.args[0])
+        msg = str(err.args[0])
     except Exception:
-        print(api_error.args)
+        print(err.args)
         return False
 
     if "state: HYT00" in msg and "native error code: 0" in msg:
         return True
 
-    print(api_error.args)
+    print(err.args)
 
     return False
 
 
 def is_pymssql_disconnect(err: Exception) -> bool:
-    import pymssql  # type: ignore
+    import pymssql  # noqa
 
     return False
 
 
 def is_mysql_disconnect(err: Exception) -> bool:
-    import MySQLdb  # type: ignore
+    import MySQLdb  # noqa
 
-    if not isinstance(err, exc.OperationalError):
-        return False
-
-    orig = err.orig
-
-    if not isinstance(orig, MySQLdb.OperationalError):
+    if not isinstance(err, MySQLdb.OperationalError):
         return False
 
     try:
-        code, msg = orig.args
+        code, msg = err.args
 
         if code == 2013 and "Lost connection to MySQL server" in msg:
             return True
     except Exception:
-        print(orig.args)
+        print(err.args)
+
+    return False
+
+
+def is_pymysql_disconnect(err: Exception) -> bool:
+    import pymysql  # noqa
+
+    if not isinstance(err, pymysql.err.OperationalError):
+        return False
+
+    try:
+        code, msg = err.args
+
+        if code == 2013 and "Lost connection to MySQL server" in msg:
+            return True
+    except Exception:
+        print(err.args)
 
     return False
 
