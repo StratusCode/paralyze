@@ -62,3 +62,19 @@ class Context(t.Generic[Config]):
             core.sleep(self.stopping, timeout, step)
         finally:
             self.maybe_stop()
+
+    def interval(
+        self,
+        interval: float,
+        func: t.Callable[core.P, None],
+        *args: core.P.args,
+        **kwargs: core.P.kwargs,
+    ) -> t.Callable[[], None]:
+        return core.interval(
+            self.stopping,
+            self.log,
+            interval,
+            func,
+            *args,
+            **kwargs,
+        )
