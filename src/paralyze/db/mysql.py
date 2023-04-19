@@ -1,8 +1,8 @@
-import orjson
 from sqlalchemy import create_engine, engine
 from sqlalchemy.engine import url as engine_url
 
 from paralyze.config import mysql as config
+from paralyze.db import json
 
 
 __all__ = (
@@ -39,7 +39,7 @@ def get_engine(cfg: config.Config) -> engine.Engine:
         pool_size=cfg.pool.size,
         pool_timeout=cfg.pool.timeout,
         max_overflow=cfg.pool.overflow,
-        json_serializer=orjson.dumps,
+        json_serializer=json.dumps,
         connect_args=dict(
             connect_timeout=cfg.connect_timeout,
             charset="utf8mb4",

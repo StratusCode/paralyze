@@ -1,10 +1,10 @@
 import typing as t
 
-import orjson
 from sqlalchemy import create_engine, engine
 from sqlalchemy.engine import url as engine_url
 
 from paralyze.config import mssql as config
+from paralyze.db import json
 
 
 def get_engine(cfg: config.Config) -> engine.Engine:
@@ -46,7 +46,7 @@ def get_engine(cfg: config.Config) -> engine.Engine:
         pool_recycle=cfg.pool.recycle,
         pool_size=cfg.pool.size,
         pool_timeout=cfg.pool.timeout,
-        json_serializer=orjson.dumps,
+        json_serializer=json.dumps,
         connect_args=connect_args,
         echo=cfg.echo,
     )
