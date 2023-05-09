@@ -192,9 +192,9 @@ class ThreadPoolExecutor(futures.ThreadPoolExecutor):
         fn: t.Callable[P, T],
         *args: P.args,
         **kwargs: P.kwargs,
-    ) -> "futures.Future[r.Result[T, Stopping]]":
+    ) -> "futures.Future[r.Result[T, t.Type[Stopping]]]":
         @functools.wraps(fn)
-        def wrap() -> r.Result[T, Stopping]:
+        def wrap() -> r.Result[T, t.Type[Stopping]]:
             if self.stopping.is_set():
                 return r.Err(Stopping)
 
