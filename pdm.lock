@@ -434,6 +434,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "result"
+version = "0.10.0"
+requires_python = ">=3.7"
+summary = "A Rust-like result type for Python"
+
+[[package]]
 name = "rsa"
 version = "4.9"
 requires_python = ">=3.6,<4"
@@ -506,7 +512,7 @@ summary = "Filesystem events monitoring"
 lock_version = "4.2"
 cross_platform = true
 groups = ["default", "dev"]
-content_hash = "sha256:b0d6cabe2682c1cae58377fededa2d8a4d60d9b38fcdf7e01ed9eb2a90226d11"
+content_hash = "sha256:f849300688476a0eb14aabb61a2e6cc7222848cc0d6d2f240ad4ec2c6d0624d3"
 
 [metadata.files]
 "attrs 22.2.0" = [
@@ -1127,6 +1133,10 @@ content_hash = "sha256:b0d6cabe2682c1cae58377fededa2d8a4d60d9b38fcdf7e01ed9eb2a9
 "requests 2.28.2" = [
     {url = "https://files.pythonhosted.org/packages/9d/ee/391076f5937f0a8cdf5e53b701ffc91753e87b07d66bae4a09aa671897bf/requests-2.28.2.tar.gz", hash = "sha256:98b1b2782e3c6c4904938b84c0eb932721069dfdb9134313beff7c83c2df24bf"},
     {url = "https://files.pythonhosted.org/packages/d2/f4/274d1dbe96b41cf4e0efb70cbced278ffd61b5c7bb70338b62af94ccb25b/requests-2.28.2-py3-none-any.whl", hash = "sha256:64299f4909223da747622c030b781c0d7811e359c37124b4bd368fb8c6518baa"},
+]
+"result 0.10.0" = [
+    {url = "https://files.pythonhosted.org/packages/1c/73/607744c360eb53d99b3d4232e24598bd44041b57e23ac2b85c37e17bf303/result-0.10.0.tar.gz", hash = "sha256:28bc217336c2f1d339b494241ccf3714e36e6bd90abc04df318d65dccb61594f"},
+    {url = "https://files.pythonhosted.org/packages/9a/09/b25dca0617ed499b9d49ecad2da08d7372e7e38451f2800076f9ac61420a/result-0.10.0-py3-none-any.whl", hash = "sha256:a284420d599bd63d6a5bcf60701abf93f479b4aab282379ebadf51b6cafd1ba4"},
 ]
 "rsa 4.9" = [
     {url = "https://files.pythonhosted.org/packages/49/97/fa78e3d2f65c02c8e1268b9aba606569fe97f6c8f7c2d74394553347c145/rsa-4.9-py3-none-any.whl", hash = "sha256:90260d9058e514786967344d0ef75fa8727eed8a7d2e43ce9f4bcf1b536174f7"},

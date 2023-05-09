@@ -6,6 +6,8 @@ import time
 import threading
 import typing as t
 
+import result as r
+
 from paralyze import logging
 
 
@@ -190,16 +192,16 @@ class ThreadPoolExecutor(futures.ThreadPoolExecutor):
         fn: t.Callable[P, T],
         *args: P.args,
         **kwargs: P.kwargs,
-    ) -> "futures.Future[T]":
+    ) -> "futures.Future[r.Result[T, Stopping]]":
         @functools.wraps(fn)
-        def wrap() -> T:
+        def wrap() -> r.Result[T, Stopping]:
             if self.stopping.is_set():
-                raise Stopping
+                return r.Err(Stopping)
 
             try:
                 ret = fn(*args, **kwargs)
             except Stopping:
-                raise
+                return r.Err(Stopping)
             except Exception:
                 self.stopping.set()
                 self.log.exception("error")
@@ -207,8 +209,8 @@ class ThreadPoolExecutor(futures.ThreadPoolExecutor):
                 raise
             else:
                 if self.stopping.is_set():
-                    raise Stopping
+                    return r.Err(Stopping)
 
-                return ret
+                return r.Ok(ret)
 
         return super().submit(wrap)
