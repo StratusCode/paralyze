@@ -70,7 +70,7 @@ def sleep(stopping: threading.Event, delay: float, step: float = 1.0) -> None:
 
     while amount > 0:
         if stopping.is_set():
-            return
+            raise Stopping
 
         time.sleep(min(step, amount))
 
