@@ -33,6 +33,11 @@ dev = [
     "pytest",
     "python-dotenv[cli]",
     "types-pyyaml>=6.0.12.8",
+    "types-PyMySQL",
+    "types-colorama",
+    "types-mysqlclient",
+    "types-protobuf",
+    "types-requests",
     "vulture",
 ]
 

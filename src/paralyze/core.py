@@ -111,7 +111,7 @@ def interval(
     func: t.Callable[P, None],
     *args: P.args,
     **kwargs: P.kwargs,
-) -> None:
+) -> t.Never:
     """
     Call a function every interval seconds.
     """
@@ -129,6 +129,8 @@ def interval(
         func(*args, **kwargs)
 
         end = time.time()
+
+    raise Stopping
 
 
 def install_signals(stopping: threading.Event, logger: logging.Logger) -> None:

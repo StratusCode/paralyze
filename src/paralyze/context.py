@@ -69,10 +69,9 @@ class Context(t.Generic[Config]):
         func: t.Callable[core.P, None],
         *args: core.P.args,
         **kwargs: core.P.kwargs,
-    ) -> t.Callable[[], None]:
-        return core.interval(
+    ) -> t.Never:
+        core.interval(
             self.stopping,
-            self.log,
             interval,
             func,
             *args,

@@ -474,9 +474,42 @@ requires_python = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 summary = "Python Library for Tom's Obvious, Minimal Language"
 
 [[package]]
+name = "types-colorama"
+version = "0.4.15.11"
+summary = "Typing stubs for colorama"
+
+[[package]]
+name = "types-mysqlclient"
+version = "2.1.5.7"
+summary = "Typing stubs for mysqlclient"
+
+[[package]]
+name = "types-protobuf"
+version = "4.23.0.1"
+summary = "Typing stubs for protobuf"
+
+[[package]]
+name = "types-pymysql"
+version = "1.0.19.7"
+summary = "Typing stubs for PyMySQL"
+
+[[package]]
 name = "types-pyyaml"
 version = "6.0.12.9"
 summary = "Typing stubs for PyYAML"
+
+[[package]]
+name = "types-requests"
+version = "2.30.0.0"
+summary = "Typing stubs for requests"
+dependencies = [
+    "types-urllib3",
+]
+
+[[package]]
+name = "types-urllib3"
+version = "1.26.25.13"
+summary = "Typing stubs for urllib3"
 
 [[package]]
 name = "typing-extensions"
@@ -509,7 +542,7 @@ summary = "Filesystem events monitoring"
 lock_version = "4.2"
 cross_platform = true
 groups = ["default", "dev"]
-content_hash = "sha256:b0d6cabe2682c1cae58377fededa2d8a4d60d9b38fcdf7e01ed9eb2a90226d11"
+content_hash = "sha256:9ce97b16216836b8ad4f4955c0a0237aca9cb33bf346a77bf464ab749f30ac08"
 
 [metadata.files]
 "attrs 23.1.0" = [
@@ -1218,9 +1251,33 @@ content_hash = "sha256:b0d6cabe2682c1cae58377fededa2d8a4d60d9b38fcdf7e01ed9eb2a9
     {url = "https://files.pythonhosted.org/packages/44/6f/7120676b6d73228c96e17f1f794d8ab046fc910d781c8d151120c3f1569e/toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},
     {url = "https://files.pythonhosted.org/packages/be/ba/1f744cdc819428fc6b5084ec34d9b30660f6f9daaf70eead706e3203ec3c/toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"},
 ]
+"types-colorama 0.4.15.11" = [
+    {url = "https://files.pythonhosted.org/packages/2f/10/06c3d22234b00d511801a358593e70a4206ad9b8e212ebf3bd89e9acfea1/types-colorama-0.4.15.11.tar.gz", hash = "sha256:a9421eb24d9cfc584880dc1d33b7fd406a14227c1f99f50c5ab9265e04d07638"},
+    {url = "https://files.pythonhosted.org/packages/79/36/007419dcbd7ef4fe4289d79f4e94b92813c27ca3b88dc2a67ea2d1b6475a/types_colorama-0.4.15.11-py3-none-any.whl", hash = "sha256:d1e37571a19e152c930b3e789c316e9332e51a43bfcd4470b98225be974fb90c"},
+]
+"types-mysqlclient 2.1.5.7" = [
+    {url = "https://files.pythonhosted.org/packages/7c/46/a43796768ca95512139b5954d76f6083c50b9de89f6db14e74d8979ad7b1/types-mysqlclient-2.1.5.7.tar.gz", hash = "sha256:726394639524eb42289f99d53d6a872985d42263f9de6402e9faa88464a8f9a4"},
+    {url = "https://files.pythonhosted.org/packages/b2/13/ec20e4a43c686cd77a64929f12da56682fb43aefa12deef4de1454a744e9/types_mysqlclient-2.1.5.7-py3-none-any.whl", hash = "sha256:ac582d9cd8b4c964be9fbe7842c1ff47dac32cc93201f1cac886cdf363933c3a"},
+]
+"types-protobuf 4.23.0.1" = [
+    {url = "https://files.pythonhosted.org/packages/e0/06/92f7b78bb02e511a2eb651bff19fa1d18f29a28e30f6366e69da2c833a1a/types-protobuf-4.23.0.1.tar.gz", hash = "sha256:7bd5ea122a057b11a82b785d9de464932a1e9175fe977a4128adef11d7f35547"},
+    {url = "https://files.pythonhosted.org/packages/ff/46/eab94a15512a21e9e89df47de5777383977f3da2d5e4df66b19bf7510c68/types_protobuf-4.23.0.1-py3-none-any.whl", hash = "sha256:c926104f69ea62103846681b35b690d8d100ecf86c6cdda16c850a1313a272e4"},
+]
+"types-pymysql 1.0.19.7" = [
+    {url = "https://files.pythonhosted.org/packages/d5/ea/6191df04cd6804542c84336b6dd2f6142b42caa352157900af0b8980c7e0/types-PyMySQL-1.0.19.7.tar.gz", hash = "sha256:8ea7083a3bd37c4e77f38d8d93e488fba3bb03e3d3d41cc52cd92110375ed517"},
+    {url = "https://files.pythonhosted.org/packages/f5/a3/e2b838f6818b6e0f063353a2a621dae3a5c8fb8f3e1649c90ba71381822b/types_PyMySQL-1.0.19.7-py3-none-any.whl", hash = "sha256:672f0e3e5070da2dc58448d289b878c5c99febb37c9f2cbe309779301ae914fb"},
+]
 "types-pyyaml 6.0.12.9" = [
     {url = "https://files.pythonhosted.org/packages/05/6f/f19081de5ba81864f89e354560a60637822f7d6d54d9a2a907785e9b5cc4/types-PyYAML-6.0.12.9.tar.gz", hash = "sha256:c51b1bd6d99ddf0aa2884a7a328810ebf70a4262c292195d3f4f9a0005f9eeb6"},
     {url = "https://files.pythonhosted.org/packages/88/93/a98be346729157d9f085fd68e58fcbba823188829ac8488a9d7f12614e53/types_PyYAML-6.0.12.9-py3-none-any.whl", hash = "sha256:5aed5aa66bd2d2e158f75dda22b059570ede988559f030cf294871d3b647e3e8"},
+]
+"types-requests 2.30.0.0" = [
+    {url = "https://files.pythonhosted.org/packages/3b/a7/7d6dab83a48eff91ff75e21b2aaefd7419a29d5b1b1b8025d4a78ade0017/types-requests-2.30.0.0.tar.gz", hash = "sha256:dec781054324a70ba64430ae9e62e7e9c8e4618c185a5cb3f87a6738251b5a31"},
+    {url = "https://files.pythonhosted.org/packages/fa/c7/024171d587afe75934a6f779922d24fcc6dd468e947c74598eb17840e229/types_requests-2.30.0.0-py3-none-any.whl", hash = "sha256:c6cf08e120ca9f0dc4fa4e32c3f953c3fba222bcc1db6b97695bce8da1ba9864"},
+]
+"types-urllib3 1.26.25.13" = [
+    {url = "https://files.pythonhosted.org/packages/08/6d/98b51f9776747e1e270919aa02298ce6a7d2d4d78a3349b47666deb61c4c/types_urllib3-1.26.25.13-py3-none-any.whl", hash = "sha256:5dbd1d2bef14efee43f5318b5d36d805a489f6600252bb53626d4bfafd95e27c"},
+    {url = "https://files.pythonhosted.org/packages/27/2a/cb418a2a03a31b8e0daea5e13edcc4ef1408ebb457f2cc833f1c3f30a0fa/types-urllib3-1.26.25.13.tar.gz", hash = "sha256:3300538c9dc11dad32eae4827ac313f5d986b8b21494801f1bf97a1ac6c03ae5"},
 ]
 "typing-extensions 4.5.0" = [
     {url = "https://files.pythonhosted.org/packages/31/25/5abcd82372d3d4a3932e1fa8c3dbf9efac10cc7c0d16e78467460571b404/typing_extensions-4.5.0-py3-none-any.whl", hash = "sha256:fb33085c39dd998ac16d1431ebc293a8b3eedd00fd4a32de0ff79002c19511b4"},
