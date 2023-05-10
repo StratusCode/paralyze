@@ -16,7 +16,6 @@ dependencies = [
     "structlog",
     "sqlalchemy>=2.0.7",
     "orjson>=3.8.9",
-    "result>=0.10.0",
 ]
 
 [tool.pdm.dev-dependencies]
