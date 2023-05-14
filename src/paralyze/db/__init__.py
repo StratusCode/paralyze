@@ -1,5 +1,6 @@
 import contextlib
 import threading
+import typing as t
 
 from sqlalchemy import engine, orm
 
@@ -13,8 +14,29 @@ __all__ = (
 )
 
 
-def make_session_class(bind: engine.Engine) -> "orm.sessionmaker[orm.Session]":
-    return orm.sessionmaker(bind=bind)
+@t.overload
+def make_session_class(
+    bind: engine.Engine,
+    scoped: t.Literal[False],
+) -> "orm.sessionmaker[orm.Session]":
+    ...
+
+
+@t.overload
+def make_session_class(
+    bind: engine.Engine,
+    scoped: t.Literal[True],
+) -> "orm.scoped_session[orm.Session]":
+    ...
+
+
+def make_session_class(bind: engine.Engine, scoped: bool = False):
+    ret = orm.sessionmaker(bind=bind)
+
+    if scoped:
+        return orm.scoped_session(ret)
+
+    return ret
 
 
 @contextlib.contextmanager
