@@ -18,7 +18,7 @@ def get_engine(cfg: config.Config) -> engine.Engine:
                 Encrypt="no",
             )
             query = dict(
-                driver="ODBC Driver 18 for SQL Server",
+                driver="FreeTDS",
             )
         case "pymssql":
             connect_args = dict(
