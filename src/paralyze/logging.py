@@ -11,10 +11,18 @@ from structlog import contextvars
 
 Logger: t.TypeAlias = structlog.stdlib.BoundLogger
 
-LOGGERS = {
+
+class LoggingConfig(t.TypedDict):
+    level: int
+
+
+LOGGERS: t.Dict[str, LoggingConfig] = {
     "urllib3.connectionpool": {
         "level": logging.WARNING,
     },
+    "google.auth._default": {
+        "level": logging.WARNING,
+    }
 }
 
 
@@ -65,7 +73,7 @@ def structlog_processors() -> t.List:
     return processors
 
 
-def configure() -> None:
+def configure(loggers: t.Dict[str, LoggingConfig] | None = None) -> None:
     structlog.configure(
         processors=structlog_processors(),
         wrapper_class=structlog.stdlib.BoundLogger,
@@ -74,4 +82,7 @@ def configure() -> None:
     )
 
     for name, config in LOGGERS.items():
+        logging.getLogger(name).setLevel(config["level"])
+
+    for name, config in (loggers or {}).items():
         logging.getLogger(name).setLevel(config["level"])
