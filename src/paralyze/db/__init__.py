@@ -17,7 +17,7 @@ __all__ = (
 @t.overload
 def make_session_class(
     bind: engine.Engine,
-    scoped: t.Literal[False],
+    scoped: t.Literal[False] = False,
 ) -> "orm.sessionmaker[orm.Session]":
     ...
 

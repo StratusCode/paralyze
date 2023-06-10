@@ -39,6 +39,7 @@ dev = [
     "types-protobuf",
     "types-requests",
     "vulture",
+    "types-pymssql>=2.1.0",
 ]
 
 [tool.pdm.build]
