@@ -13,6 +13,8 @@ class Host(db.BaseSQL):
     host: str
     port: int = 3306
 
+    compress: bool = False
+
     # TODO: think about SSL
 
 
@@ -23,6 +25,8 @@ class Socket(db.BaseSQL):
 
     # path to the Unix socket
     socket: str
+
+    compress: bool = False
 
 
 Config = Host | Socket

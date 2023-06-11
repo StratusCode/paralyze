@@ -43,6 +43,7 @@ def get_engine(cfg: config.Config) -> engine.Engine:
         connect_args=dict(
             connect_timeout=cfg.connect_timeout,
             charset="utf8mb4",
+            compress=cfg.compress,
         ),
         echo=cfg.echo,
     )
