@@ -12,7 +12,7 @@ def get_engine(cfg: config.Config) -> engine.Engine:
     query: t.Dict[str, t.Any]
 
     match cfg.driver:
-        case "turbodbc":
+        case "turbodbc" | "pyodbc":
             connect_args = dict(
                 connect_timeout=cfg.connect_timeout,
                 Encrypt="no",

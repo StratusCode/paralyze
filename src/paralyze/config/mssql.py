@@ -8,8 +8,8 @@ __all__ = (
 
 
 class Base(db.BaseSQL):
-    # choices are turbodbc | pymssql
-    driver: str = "pymssql"
+    # choices are turbodbc | pymssql | pyodbc
+    driver: str = "pyodbc"
 
     schema: str = "dbo"
 
