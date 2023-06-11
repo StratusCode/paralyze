@@ -15,10 +15,9 @@ def get_engine(cfg: config.Config) -> engine.Engine:
         case "turbodbc":
             connect_args = dict(
                 connect_timeout=cfg.connect_timeout,
-                Encrypt="no",
             )
             query = dict(
-                driver="FreeTDS",
+                driver="ODBC Driver 18 for SQL Server",
             )
         case "pymssql":
             connect_args = dict(
