@@ -41,7 +41,7 @@ def error_boundary(
 
     try:
         yield log
-    except Exception as err:
+    except BaseException as err:
         if not stopping.is_set():
             stopping.set()
 
@@ -204,7 +204,7 @@ class ThreadPoolExecutor(futures.ThreadPoolExecutor):
                 self.stopping.set()
 
                 raise Stopping
-            except Exception:
+            except BaseException:
                 self.stopping.set()
                 self.log.exception("error")
 

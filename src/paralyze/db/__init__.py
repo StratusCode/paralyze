@@ -47,7 +47,7 @@ def with_transaction(session: orm.Session, stopping: threading.Event):
     with session.begin() as transaction:
         try:
             yield transaction
-        except Exception:
+        except BaseException:
             if not stopping.is_set():
                 stopping.set()
 

@@ -559,7 +559,7 @@ class Client:
     def __exit__(self, *_: t.Any) -> None:
         try:
             self.stop()
-        except Exception:
+        except BaseException:
             logger.exception("metrics.stop")
 
     def close(self, ts: TimeSeries) -> None:
