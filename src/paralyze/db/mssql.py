@@ -12,10 +12,11 @@ def get_engine(cfg: config.Config) -> engine.Engine:
     query: t.Dict[str, t.Any]
 
     match cfg.driver:
-        case "turbodbc" | "pyodbc":
+        case "turbodbc":
             connect_args = dict(
                 connect_timeout=cfg.connect_timeout,
                 Encrypt="no",
+                LongAsMax="yes",
             )
             query = dict(
                 driver="ODBC Driver 18 for SQL Server",
