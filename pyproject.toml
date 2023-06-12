@@ -14,7 +14,7 @@ dependencies = [
     "configur8>=2.0, <2.1",
     "google-cloud-monitoring",
     "structlog",
-    "sqlalchemy>=2.0.7",
+    "sqlalchemy",
     "orjson>=3.8.9",
 ]
 
