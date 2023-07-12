@@ -4,6 +4,26 @@ import typing as t
 
 from sqlalchemy import exc
 
+try:
+    import turbodbc
+except ImportError:
+    turbodbc = None
+
+try:
+    import pymssql
+except ImportError:
+    pymssql = None
+
+try:
+    import MySQLdb
+except ImportError:
+    MySQLdb = None
+
+try:
+    import pymysql
+except ImportError:
+    pymysql = None
+
 __all__ = (
     "retry_on_disconnect",
 )
@@ -13,14 +33,14 @@ P = t.ParamSpec("P")
 R = t.TypeVar("R")
 
 
-def unwrap_sqlalchemy_error(err: Exception) -> Exception | None:
+def unwrap_sqlalchemy_error(err: BaseException) -> BaseException | None:
     if isinstance(err, exc.DBAPIError):
         return t.cast(Exception, err.orig)
 
     return err
 
 
-def is_disconnect(err: Exception) -> bool:
+def is_disconnect(err: BaseException) -> bool:
     my_err = unwrap_sqlalchemy_error(err)
 
     if my_err is None:
@@ -41,10 +61,8 @@ def is_disconnect(err: Exception) -> bool:
     return False
 
 
-def is_turbodbc_disconnect(err: Exception) -> bool:
-    try:
-        import turbodbc  # noqa
-    except ImportError:
+def is_turbodbc_disconnect(err: BaseException) -> bool:
+    if not turbodbc:
         return False
 
     if not isinstance(err, turbodbc.DatabaseError):
@@ -52,7 +70,7 @@ def is_turbodbc_disconnect(err: Exception) -> bool:
 
     try:
         msg = str(err.args[0])
-    except Exception:
+    except BaseException:
         print(err.args)
         return False
 
@@ -64,19 +82,15 @@ def is_turbodbc_disconnect(err: Exception) -> bool:
     return False
 
 
-def is_pymssql_disconnect(err: Exception) -> bool:
-    try:
-        import pymssql  # noqa
-    except ImportError:
+def is_pymssql_disconnect(err: BaseException) -> bool:
+    if not pymssql:
         return False
 
     return False
 
 
-def is_mysql_disconnect(err: Exception) -> bool:
-    try:
-        import MySQLdb  # noqa
-    except ImportError:
+def is_mysql_disconnect(err: BaseException) -> bool:
+    if not MySQLdb:
         return False
 
     if not isinstance(err, MySQLdb.OperationalError):
@@ -87,16 +101,14 @@ def is_mysql_disconnect(err: Exception) -> bool:
 
         if code == 2013 and "Lost connection to MySQL server" in msg:
             return True
-    except Exception:
+    except BaseException:
         print(err.args)
 
     return False
 
 
-def is_pymysql_disconnect(err: Exception) -> bool:
-    try:
-        import pymysql  # noqa
-    except ImportError:
+def is_pymysql_disconnect(err: BaseException) -> bool:
+    if not pymysql:
         return False
 
     if not isinstance(err, pymysql.err.OperationalError):
@@ -107,7 +119,7 @@ def is_pymysql_disconnect(err: Exception) -> bool:
 
         if code == 2013 and "Lost connection to MySQL server" in msg:
             return True
-    except Exception:
+    except BaseException:
         print(err.args)
 
     return False
@@ -124,12 +136,14 @@ def retry_on_disconnect(
         @functools.wraps(func)
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
             count = 0
-            err: Exception | None = None
+            err: BaseException | None = None
 
             while count < max_retries:
                 try:
                     return func(*args, **kwargs)
-                except Exception as exc:
+                except BaseException as exc:
+                    print(type(exc), exc, exc.__dict__)
+
                     if not is_disconnect(exc):
                         raise exc from exc
 
