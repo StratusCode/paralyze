@@ -4,11 +4,13 @@ import typing as t
 import weakref
 
 from google.cloud import monitoring_v3
+from google.api_core import exceptions as exc
 
 from paralyze import logging, core
 from paralyze.config import monitoring as config
 
 
+P = t.ParamSpec("P")
 PointTypes = t.Union[
     t.Type[str],
     t.Type[int],
@@ -394,10 +396,25 @@ class Client:
         for i in range(0, len(ts_with_points), 200):
             batch = ts_with_points[i: i + 200]
 
-            self._client.create_time_series({
-                "name": self._project,
-                "time_series": batch,
-            })
+            created = False
+            count = 0
+
+            while not created:
+                try:
+                    self._client.create_time_series({
+                        "name": self._project,
+                        "time_series": batch,
+                    })
+                    created = True
+                except (exc.InternalServerError):
+                    count += 1
+
+                    if count > 5:
+                        raise
+
+                    core.sleep(self._stopping, 1.0)
+
+                    continue
 
     def _run(self) -> None:
         with core.error_boundary(
