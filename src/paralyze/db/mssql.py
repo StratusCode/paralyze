@@ -27,7 +27,7 @@ def get_engine(cfg: config.Config) -> engine.Engine:
             )
             query = dict()
         case _:
-            t.assert_never(cfg.driver)
+            raise ValueError(f"Unknown driver: {cfg.driver}")
 
     url = engine_url.URL.create(
         drivername=f"mssql+{cfg.driver}",

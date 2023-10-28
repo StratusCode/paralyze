@@ -18,8 +18,8 @@ PointTypes = t.Union[
     t.Type[bool],
 ]
 
-PointType = t.TypeVar("PointType", bound=t.Union[str, int, float, bool])
-MetricValue = t.Union[str, int, float, bool]
+MetricValue = t.Union[str, bool, int, float]
+PointType = t.TypeVar("PointType", bound=MetricValue)
 
 
 METRIC_PREFIX = "custom.googleapis.com/"
@@ -96,7 +96,8 @@ class Point(t.Generic[PointType]):
             case float():
                 ret["double_value"] = self._value
             case _:
-                t.assert_never(self._value)
+                # mypy does not seem to recognize that the value is not Never.
+                t.assert_never(self._value)  # type: ignore
 
         return ret
 
