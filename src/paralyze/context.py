@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import sys
 import threading
 import typing as t
 
@@ -25,12 +26,12 @@ class Context(t.Generic[Config]):
         logger: logging.Logger | None = None,
     ) -> "Context[Config]":
         return Context(
-            stopping=self.stopping,
-            log=logger or self.log,
             cfg=self.cfg,
+            log=logger or self.log,
             metrics=self.metrics,
             parent=self,
             root=self.root or self,
+            stopping=self.stopping,
         )
 
     def thread_pool(
@@ -44,8 +45,18 @@ class Context(t.Generic[Config]):
         )
 
     def maybe_stop(self) -> None:
-        if self.stopping.is_set():
+        if not self.stopping.is_set():
+            return
+
+        _, obj, tb = sys.exc_info()
+
+        if obj is None:
             raise core.Stopping
+
+        # if we get here, we're in an exception handler
+        # and we're going to raise the exception again
+        # so that it can be handled by the caller
+        raise obj.with_traceback(tb)
 
     def wait_event(
         self,
