@@ -32,6 +32,7 @@ class Point(t.Generic[PointType]):
     """
     A builder for points.
     """
+
     _value: PointType
     _start: int | None
     _end: int | None
@@ -95,8 +96,7 @@ class Point(t.Generic[PointType]):
             case float():
                 ret["double_value"] = self._value
             case _:
-                # TODO: remove this when mypy to support bound TypeVars
-                raise t.assert_never(self._value)  # type: ignore
+                t.assert_never(self._value)
 
         return ret
 
@@ -118,10 +118,12 @@ class Point(t.Generic[PointType]):
         """
         Build a point object.
         """
-        return monitoring_v3.Point({
-            "interval": monitoring_v3.TimeInterval(self.to_interval()),
-            "value": monitoring_v3.TypedValue(self.to_value()),
-        })
+        return monitoring_v3.Point(
+            {
+                "interval": monitoring_v3.TimeInterval(self.to_interval()),
+                "value": monitoring_v3.TypedValue(self.to_value()),
+            }
+        )
 
 
 class BaseBuilder:
@@ -146,17 +148,14 @@ class TimeSeries(BaseBuilder, t.Generic[PointType]):
     """
     A builder for time series.
     """
+
     _metric_labels: t.Dict[str, MetricValue]
     _resource_type: str = "generic_task"
     _resource_labels: t.Dict[ResourceKey, str]
     _points: t.List[Point[PointType]]
     _lock: threading.RLock
 
-    def __init__(
-        self,
-        client: "Client",
-        metric_type: str
-    ) -> None:
+    def __init__(self, client: "Client", metric_type: str) -> None:
         super().__init__(client, metric_type)
 
         self._lock = threading.RLock()
@@ -258,6 +257,7 @@ class Counter(TimeSeries[int]):
     """
     A counter metric.
     """
+
     value: int
 
     def __init__(
@@ -304,6 +304,7 @@ class Gauge(TimeSeries[int]):
     """
     A gauge metric.
     """
+
     values: t.List[int]
 
     def __init__(
@@ -367,14 +368,11 @@ class Client:
     ) -> None:
         self._client = client
 
-        if project is None:
-            self._project = None
-        else:
-            self._project = (
-                monitoring_v3.MetricServiceClient.common_project_path(
-                    project,
-                )
-            )
+        self._project = (
+            None
+            if project is None
+            else monitoring_v3.MetricServiceClient.common_project_path(project)
+        )
 
         self._lock = threading.Lock()
         self._thread = threading.Thread(target=self._run)
@@ -394,19 +392,21 @@ class Client:
             return
 
         for i in range(0, len(ts_with_points), 200):
-            batch = ts_with_points[i: i + 200]
+            batch = ts_with_points[i : i + 200]  # noqa: E203
 
             created = False
             count = 0
 
             while not created:
                 try:
-                    self._client.create_time_series({
-                        "name": self._project,
-                        "time_series": batch,
-                    })
+                    self._client.create_time_series(
+                        {
+                            "name": self._project,
+                            "time_series": batch,
+                        }
+                    )
                     created = True
-                except (exc.InternalServerError):
+                except (exc.InternalServerError, exc.DeadlineExceeded):
                     count += 1
 
                     if count > 5:
@@ -497,9 +497,7 @@ class Client:
         """
         Create a new time series.
         """
-        metrics_name = (
-            self._metrics_prefix + "/" + metric_name.lstrip("/")
-        )
+        metrics_name = self._metrics_prefix + "/" + metric_name.lstrip("/")
 
         with self._lock:
             ret: TimeSeries
@@ -520,9 +518,7 @@ class Client:
         """
         Create a new counter.
         """
-        metric_name = (
-            self._metrics_prefix + "/" + metric_name.lstrip("/")
-        )
+        metric_name = self._metrics_prefix + "/" + metric_name.lstrip("/")
 
         with self._lock:
             ret = Counter(self, metric_name, initial_value)
@@ -538,9 +534,7 @@ class Client:
         """
         Create a new gauge.
         """
-        metric_name = (
-            self._metrics_prefix + "/" + metric_name.lstrip("/")
-        )
+        metric_name = self._metrics_prefix + "/" + metric_name.lstrip("/")
 
         with self._lock:
             ret = Gauge(self, metric_name)
@@ -601,11 +595,11 @@ def to_timestamp(now: int | None = None) -> Timestamp:
     if now is None:
         now = time.time_ns()
 
-    seconds = now // (10 ** 9)
+    seconds = now // (10**9)
 
     return {
         "seconds": seconds,
-        "nanos": ((now // (10 ** 9)) - seconds),
+        "nanos": ((now // (10**9)) - seconds),
     }
 
 
