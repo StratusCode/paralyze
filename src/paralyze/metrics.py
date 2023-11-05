@@ -407,7 +407,7 @@ class Client:
                         }
                     )
                     created = True
-                except (exc.InternalServerError, exc.DeadlineExceeded):
+                except exc.ServerError:
                     count += 1
 
                     if count > 5:
