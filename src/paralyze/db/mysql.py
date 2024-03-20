@@ -1,3 +1,5 @@
+import typing as t
+
 from sqlalchemy import create_engine, engine
 from sqlalchemy.engine import url as engine_url
 
@@ -5,12 +7,14 @@ from paralyze.config import mysql as config
 from paralyze.db import json
 
 
-__all__ = (
-    "get_engine",
-)
+__all__ = ("get_engine",)
 
 
 def get_engine(cfg: config.Config) -> engine.Engine:
+    """
+    Returns an SQLAlchemy engine for a MySQL database based on the supplied
+    configuration.
+    """
     driver_name = "mysql+mysqldb"
 
     match cfg:
@@ -31,6 +35,8 @@ def get_engine(cfg: config.Config) -> engine.Engine:
                 port=cfg.port,
                 database=cfg.database,
             )
+        case _:
+            t.assert_never(cfg)
 
     return create_engine(
         url,
@@ -41,7 +47,7 @@ def get_engine(cfg: config.Config) -> engine.Engine:
         max_overflow=cfg.pool.overflow,
         json_serializer=json.dumps,
         connect_args=dict(
-            connect_timeout=cfg.connect_timeout,
+            connect_timeout=cfg.timeout.connect,
             charset="utf8mb4",
             compress=cfg.compress,
         ),

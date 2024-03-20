@@ -4,8 +4,8 @@ import typing as t
 
 from sqlalchemy import engine, orm
 
-from paralyze import core
-from paralyze.db import util
+from paralyze import core, context
+from paralyze.db import transient
 
 __all__ = (
     "make_session_class",
@@ -18,16 +18,14 @@ __all__ = (
 def make_session_class(
     bind: engine.Engine,
     scoped: t.Literal[False] = False,
-) -> "orm.sessionmaker[orm.Session]":
-    ...
+) -> "orm.sessionmaker[orm.Session]": ...
 
 
 @t.overload
 def make_session_class(
     bind: engine.Engine,
     scoped: t.Literal[True],
-) -> "orm.scoped_session[orm.Session]":
-    ...
+) -> "orm.scoped_session[orm.Session]": ...
 
 
 def make_session_class(bind: engine.Engine, scoped: bool = False):
@@ -59,6 +57,14 @@ def with_transaction(session: orm.Session, stopping: threading.Event):
             raise core.Stopping()
 
 
-@util.retry_on_disconnect(delay=1, max_retries=5)
-def validate_engine(eng: engine.Engine) -> None:
-    eng.connect()
+def validate_engine(
+    ctx: context.Context[context.Config],
+    eng: engine.Engine,
+):
+    """
+    Validate the engine by connecting to the underlying database.
+
+    Note that this function returns a callable that will retry the connection.
+    This allows the caller to modify the retry behaviour if needed.
+    """
+    return ctx.retry(eng.connect).error_handler(transient.is_transient_error)

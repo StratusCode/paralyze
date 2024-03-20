@@ -149,7 +149,8 @@ def install_signals(stopping: threading.Event, logger: logging.Logger) -> None:
 def wait(
     stopping: threading.Event,
     event: threading.Event,
-    timeout: float | None = None
+    timeout: float | None = None,
+    interval: float = 5.0,
 ) -> bool:
     """
     Wait for the given event, or until the stopping event is set.
@@ -157,7 +158,7 @@ def wait(
     start = time.time()
 
     while not stopping.is_set():
-        if event.wait(5.0):
+        if event.wait(interval):
             return True
 
         end = time.time()
@@ -172,6 +173,7 @@ class ThreadPoolExecutor(futures.ThreadPoolExecutor):
     """
     Wraps each submitted function in an error boundary.
     """
+
     stopping: threading.Event
     log: logging.Logger
 

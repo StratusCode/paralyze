@@ -2,21 +2,19 @@ import typing as t
 
 from . import db
 
-__all__ = (
-    "Config",
-)
+__all__ = ("Config",)
 
 
 class Base(db.BaseSQL):
     # choices are turbodbc | pymssql | pyodbc
-    driver: str = "turbodbc"
+    driver: t.Literal["turbodbc", "pymssql", "pyodbc"] = "turbodbc"
 
     schema: str = "dbo"
 
 
 class Host(Base):
     """
-    Holds the configuration for a TCP connection to a MySQL database.
+    Holds the configuration for a TCP connection to a MS-SQL database.
     """
 
     host: str

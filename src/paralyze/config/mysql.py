@@ -1,8 +1,6 @@
 from . import db
 
-__all__ = (
-    "Config",
-)
+__all__ = ("Config",)
 
 
 class Host(db.BaseSQL):

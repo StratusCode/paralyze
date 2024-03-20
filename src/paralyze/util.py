@@ -79,10 +79,12 @@ def find_all_child_modules(
 
         if pkg.ispkg:
             for mod_path in mod.__path__:
-                ret.extend(find_all_child_modules(
-                    mod.__name__,
-                    mod_path,
-                ))
+                ret.extend(
+                    find_all_child_modules(
+                        mod.__name__,
+                        mod_path,
+                    )
+                )
 
     return ret
 

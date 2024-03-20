@@ -9,19 +9,23 @@ license = { text = "MIT" }
 dependencies = [
     "configur8>=2.0, <2.1",
     "google-cloud-monitoring",
-    "structlog",
+    "msgspec",
     "sqlalchemy",
-    "orjson>=3.8.9",
+    "structlog",
 ]
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.ruff]
+line-length = 80
 
 [tool.pdm.dev-dependencies]
 dev = [
-    "autopep8",
-    "black",
     "coverage",
-    "flake8",
     "mypy",
-    "pymssql>=2.2.7",
+    "pymssql",
     "pytest-cov",
     "pytest-mock",
     "pytest-mypy-plugins",
@@ -29,21 +33,20 @@ dev = [
     "pytest-watch",
     "pytest",
     "python-dotenv[cli]",
-    "turbodbc>=4.6.0",
+    "ruff",
+    "turbodbc",
+    # included because mypy complains about:
+    # `structlog/dev.py:39: error: Library stubs not installed for "colorama"  [import-untyped]`
+    # even though it's not a direct dependency
     "types-colorama",
     "types-mysqlclient",
     "types-protobuf",
-    "types-pymssql>=2.1.0",
-    "types-pymysql>=1.1.0.0",
-    "types-pyyaml>=6.0.12.8",
+    "types-pymssql",
+    "types-pymysql",
+    "types-pyyaml",
     "types-requests",
-    "vulture",
 ]
 
 [tool.pdm.build]
 includes = ["src"]
 package-dir = "src"
-
-[build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"

@@ -1,3 +1,8 @@
+"""
+Contains the configuration for standard database connections via SQLAlchemy.
+"""
+
+
 class SQLAlchemyPool:
     """
     Holds the configuration for the MySQL connection pool.
@@ -15,6 +20,19 @@ class SQLAlchemyPool:
     pre_ping: bool = True
 
 
+class SQLAlchemyTimeout:
+    """
+    Holds the configuration for the MySQL connection timeout.
+    """
+
+    # time in seconds to wait for the initial connection to the server
+    connect: float = 5
+    # time for writing to the connection in seconds, default no timeout
+    write: float | None = None
+    # time for reading from the connection in seconds, default no timeout
+    read: float | None = None
+
+
 class BaseSQL:
     username: str
     password: str
@@ -24,17 +42,13 @@ class BaseSQL:
     echo: bool = False
 
     pool: SQLAlchemyPool = SQLAlchemyPool()
-    # time in seconds to wait for the initial connection to the server
-    connect_timeout: int = 5
-    # time for writing to the connection in seconds, default no timeout
-    write_timeout: int | None = None
-    # time for reading from the connection in seconds, default no timeout
-    read_timeout: int | None = None
+
+    timeout: SQLAlchemyTimeout = SQLAlchemyTimeout()
 
 
 class Host(BaseSQL):
     """
-    Holds the configuration for a TCP connection to a MySQL database.
+    Holds the configuration for a TCP connection to a database.
     """
 
     host: str

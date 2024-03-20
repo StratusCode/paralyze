@@ -1,6 +1,6 @@
 import typing as t
 
-import orjson
+from msgspec import json
 
 __all__ = (
     "dumps",
@@ -8,16 +8,16 @@ __all__ = (
 )
 
 
-def _default(obj: t.Any) -> t.Any:
+def enc_hook(obj: t.Any) -> t.Any:
     if hasattr(obj, "to_json"):
         return obj.to_json()
 
-    raise TypeError
+    raise NotImplementedError(f"Cannot serialize {obj!r}")
 
 
 def dumps(obj: t.Any) -> bytes:
-    return orjson.dumps(obj, default=_default)
+    return json.encode(obj, enc_hook=enc_hook)
 
 
 def loads(obj: bytes) -> t.Any:
-    return orjson.loads(obj)
+    return json.decode(obj)

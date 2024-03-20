@@ -1,10 +1,10 @@
 import typing as t
 
+from msgspec import json
 from sqlalchemy import create_engine, engine
 from sqlalchemy.engine import url as engine_url
 
 from paralyze.config import mssql as config
-from paralyze.db import json
 
 
 def get_engine(cfg: config.Config) -> engine.Engine:
@@ -14,7 +14,7 @@ def get_engine(cfg: config.Config) -> engine.Engine:
     match cfg.driver:
         case "turbodbc":
             connect_args = dict(
-                connect_timeout=cfg.connect_timeout,
+                connect_timeout=cfg.timeout.connect,
                 Encrypt="no",
             )
             query = dict(
@@ -22,8 +22,8 @@ def get_engine(cfg: config.Config) -> engine.Engine:
             )
         case "pymssql":
             connect_args = dict(
-                login_timeout=cfg.connect_timeout,
-                timeout=cfg.read_timeout or 0,
+                login_timeout=cfg.timeout.connect,
+                timeout=cfg.timeout.read or 0,
             )
             query = dict()
         case _:
@@ -46,7 +46,7 @@ def get_engine(cfg: config.Config) -> engine.Engine:
         pool_recycle=cfg.pool.recycle,
         pool_size=cfg.pool.size,
         pool_timeout=cfg.pool.timeout,
-        json_serializer=json.dumps,
+        json_serializer=json.encode,
         connect_args=connect_args,
         echo=cfg.echo,
     )

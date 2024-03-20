@@ -463,32 +463,28 @@ class Client:
         self,
         metric_name: str,
         point_type: t.Type[str],
-    ) -> TimeSeries[str]:
-        ...
+    ) -> TimeSeries[str]: ...
 
     @t.overload
     def time_series(  # type: ignore
         self,
         metric_name: str,
         point_type: t.Type[bool],
-    ) -> TimeSeries[bool]:
-        ...
+    ) -> TimeSeries[bool]: ...
 
     @t.overload
     def time_series(
         self,
         metric_name: str,
         point_type: t.Type[int],
-    ) -> TimeSeries[int]:
-        ...
+    ) -> TimeSeries[int]: ...
 
     @t.overload
     def time_series(
         self,
         metric_name: str,
         point_type: t.Type[float],
-    ) -> TimeSeries[float]:
-        ...
+    ) -> TimeSeries[float]: ...
 
     def time_series(
         self,
